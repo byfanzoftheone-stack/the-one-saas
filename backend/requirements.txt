@@ -1,4 +1,6 @@
 uvicorn
+python-multipart
+uvicorn
 fastapi
 uvicorn
 pyjwt
