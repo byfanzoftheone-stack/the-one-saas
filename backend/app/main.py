@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -5,11 +6,14 @@ import jwt
 
 app = FastAPI()
 
-SECRET = "CHANGE_ME_SECRET"
+SECRET_KEY = os.environ.get("SECRET_KEY", "CHANGE_ME_SECRET")
+
+_raw_origins = os.environ.get("ALLOWED_ORIGINS", "*").strip()
+ALLOWED_ORIGINS = ["*"] if _raw_origins == "*" else [o.strip() for o in _raw_origins.split(",")]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -22,11 +26,11 @@ class User(BaseModel):
     password: str
 
 def create_token(email):
-    return jwt.encode({"sub": email}, SECRET, algorithm="HS256")
+    return jwt.encode({"sub": email}, SECRET_KEY, algorithm="HS256")
 
 def get_user(token: str):
     try:
-        data = jwt.decode(token, SECRET, algorithms=["HS256"])
+        data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
         return data["sub"]
     except:
         raise HTTPException(status_code=401, detail="Invalid token")
