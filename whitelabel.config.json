@@ -1,0 +1,13 @@
+{
+  "brand_alias": "FanzSpot Labs",
+  "repo": "the-one-saas",
+  "vertical": "multi-vertical",
+  "offer": {
+    "setup_fee": 997,
+    "monthly_fee": 297,
+    "currency": "USD"
+  },
+  "fulfillment_model": "white_label",
+  "support_model": "async_weekly_optimization",
+  "generated_at": "2026-05-09T18:59:17.754Z"
+}
