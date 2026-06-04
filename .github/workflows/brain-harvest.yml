@@ -1,0 +1,61 @@
+name: Brain Harvest
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 6 * * *'
+
+jobs:
+  harvest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Harvest brain atoms from repo
+        env:
+          MCP_API_KEY: ${{ secrets.MCP_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          node -e "
+          const repo = process.env.GITHUB_REPOSITORY.split('/')[1];
+          const fs = require('fs');
+          let content = '';
+          ['README.md','SYSTEM.md','context.md','INDEX_OF_FLOW.md','package.json'].forEach(f => {
+            try { content += fs.readFileSync(f,'utf8').slice(0,1500) + '
+
+'; } catch(e) {}
+          });
+          if (!content.trim()) { console.log('No content found'); process.exit(0); }
+          fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': process.env.ANTHROPIC_API_KEY,
+              'anthropic-version': '2023-06-01'
+            },
+            body: JSON.stringify({
+              model: 'claude-haiku-4-5-20251001',
+              max_tokens: 2000,
+              messages: [{role:'user',content:'Extract 3-5 knowledge atoms from this repo as JSON. Output ONLY valid JSON no markdown: {"knowledge_atoms":[{"id":"'+repo+'-atom-1","category":"BUILD_METHOD","title":"...","core":"...","confidence":0.9,"impact":7,"status":"implemented","tags":["'+repo+'"]}]}
+
+Repo:'+repo+'
+
+'+content}]
+            })
+          })
+          .then(r=>r.json())
+          .then(d=>{
+            const text = d.content[0].text.replace(/\`\`\`json|\`\`\`/g,'').trim();
+            const atoms = JSON.parse(text);
+            return fetch('https://fanz-github-mcp-production.up.railway.app/v1/brain/ingest',{
+              method:'POST',
+              headers:{'Content-Type':'application/json','x-api-key':process.env.MCP_API_KEY},
+              body:JSON.stringify(atoms)
+            });
+          })
+          .then(r=>r.json())
+          .then(d=>console.log('Harvested:',repo,'Added:',d.added,'Total:',d.total))
+          .catch(e=>console.log('Error:',e.message));
+          "
