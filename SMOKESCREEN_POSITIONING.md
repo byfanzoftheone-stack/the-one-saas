@@ -11,6 +11,6 @@ FanzSpot Labs helps multi-vertical teams deploy AI-enabled operations accelerati
 - Compounding improvements across sales, delivery, and retention.
 
 ## Proof Script
-Show current workflow, show automated workflow, show measurable delta in 7-14 days.
+Show current workflow,show automated workflow, show measurable delta in 7-14 days.
 
 Generated: 2026-05-09T18:59:17.754Z
