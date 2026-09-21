@@ -1,0 +1,22 @@
+{
+  "repo": "the-one-saas",
+  "north_star_metric": "weekly_value_created",
+  "kpis": [
+    "qualified_leads",
+    "demos_booked",
+    "deals_closed",
+    "active_clients",
+    "monthly_recurring_revenue"
+  ],
+  "update_cadence": "weekly",
+  "generated_at": "2026-05-09T18:59:17.754Z",
+  "sample_weekly": {
+    "weekly_value_created": 12840,
+    "qualified_leads": 42,
+    "demos_booked": 11,
+    "deals_closed": 3,
+    "active_clients": 17,
+    "monthly_recurring_revenue": 8940,
+    "week_label": "Week of Sep 15, 2026"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "brand_alias": "FanzSpot Labs",
+  "vertical": "multi-vertical",
+  "objective": "Propagate high-value product systems across the portfolio",
+  "value_loop": [
+    "Keep what works and compound it.",
+    "Convert build assets into packaged offers.",
+    "Measure weekly value signals and upgrade bottlenecks."
+  ],
+  "smokescreen": {
+    "headline": "FanzSpot Labs: multi-vertical operating system",
+    "category_story": "FanzSpot Labs helps multi-vertical teams deploy AI-enabled operations acceleration with a repeatable white-label model.",
+    "credibility_angles": [
+      "Built from real deployments, not slideware.",
+      "Fast onboarding path with measurable weekly outcomes.",
+      "Compounding improvements across sales, delivery, and retention."
+    ],
+    "proof_script": "Show current workflow, show automated workflow, show measurable delta in 7-14 days."
+  },
+  "proof_of_value": {
+    "weekly_cycle": [
+      "Capture baseline metric snapshot.",
+      "Deploy one value improvement.",
+      "Measure impact after 7 days.",
+      "Publish short proof artifact for sales.",
+      "Feed learnings back into Index of Flow."
+    ],
+    "required_proof_assets": [
+      "Before/after workflow screenshot",
+      "KPI delta summary",
+      "Client feedback quote (if available)",
+      "Next optimization hypothesis"
+    ]
+  },
+  "launch_sprint_14d": {
+    "day_1_3_positioning": [
+      "Finalize smokescreen narrative and offer stack.",
+      "Define target buyer list and outbound script."
+    ],
+    "day_4_7_activation": [
+      "Run 20 direct outreaches.",
+      "Book demos and gather objections."
+    ],
+    "day_8_11_proof": [
+      "Deliver one rapid implementation.",
+      "Capture proof loop artifacts."
+    ],
+    "day_12_14_compounding": [
+      "Convert proof into repeatable onboarding.",
+      "Push updates into INDEX_OF_FLOW.md."
+    ]
+  },
+  "required_product_files": [
+    "INDEX_OF_FLOW.md",
+    "whitelabel.config.json",
+    "product.analytics.json",
+    "SMOKESCREEN_POSITIONING.md"
+  ],
+  "generated_at": "2026-05-09T18:59:17.754Z"
+}
