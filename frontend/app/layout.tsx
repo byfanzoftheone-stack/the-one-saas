@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "The One SaaS — FanzoftheOne",
-  description: "Multi-vertical SaaS command surface by FanzoftheOne",
+  title: "FanzSpot Labs — The One SaaS",
+  description: "Multi-vertical operating system by FanzSpot Labs / FanzoftheOne",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

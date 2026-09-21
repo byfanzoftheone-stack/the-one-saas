@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { getModules } from "@/lib/modules";
+import offers from "@/data/offers.json";
 
 export const runtime = "nodejs";
 
 export async function GET() {
-  return NextResponse.json({ modules: getModules() });
+  return NextResponse.json(offers);
 }

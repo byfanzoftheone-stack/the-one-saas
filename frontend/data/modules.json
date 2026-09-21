@@ -1,0 +1,95 @@
+{
+  "modules": [
+    {
+      "name": "The One Crew",
+      "price": 49,
+      "vertical": "core",
+      "installed": false,
+      "blurb": "Core crew orchestration module for THE ONE command surface."
+    },
+    {
+      "name": "THE ONE Companion",
+      "price": 297,
+      "vertical": "companion",
+      "installed": false,
+      "blurb": "Co-evolving AI companion — core IP of THE ONE ecosystem."
+    },
+    {
+      "name": "Echo",
+      "price": 497,
+      "vertical": "avatar",
+      "installed": false,
+      "blurb": "Holographic avatar layer with WebXR, haptics, and shaders."
+    },
+    {
+      "name": "Raven",
+      "price": 297,
+      "vertical": "roofing",
+      "installed": false,
+      "blurb": "Roofing AI ops — active and monetizing white-label vertical."
+    },
+    {
+      "name": "Construction Ops",
+      "price": 497,
+      "vertical": "construction",
+      "installed": false,
+      "blurb": "General contractor platform for jobs, crews, and delivery."
+    },
+    {
+      "name": "LittlePro",
+      "price": 297,
+      "vertical": "drivers-ed",
+      "installed": false,
+      "blurb": "Driver's ed school ops and outreach module."
+    },
+    {
+      "name": "Snow Command Pro",
+      "price": 397,
+      "vertical": "snow-ice",
+      "installed": false,
+      "blurb": "Snow and ice management command system."
+    },
+    {
+      "name": "PoolConnect",
+      "price": 297,
+      "vertical": "pool-service",
+      "installed": false,
+      "blurb": "Pool service ops — deployed white-label vertical."
+    },
+    {
+      "name": "Family Rights Voice",
+      "price": 197,
+      "vertical": "advocacy",
+      "installed": false,
+      "blurb": "Advocacy platform for family rights workflows."
+    },
+    {
+      "name": "PlayBetter",
+      "price": 197,
+      "vertical": "sports",
+      "installed": false,
+      "blurb": "Sports performance tracking and coaching ops."
+    },
+    {
+      "name": "Airbnb Arbitrage Agent",
+      "price": 497,
+      "vertical": "str",
+      "installed": false,
+      "blurb": "Autonomous short-term rental arbitrage agent."
+    },
+    {
+      "name": "Trucker Dispatch",
+      "price": 397,
+      "vertical": "logistics",
+      "installed": false,
+      "blurb": "Logistics dispatch agent for trucking operations."
+    },
+    {
+      "name": "FanzSpot HQ",
+      "price": 0,
+      "vertical": "developer",
+      "installed": false,
+      "blurb": "Developer command center for the FanzSpot Labs portfolio."
+    }
+  ]
+}
