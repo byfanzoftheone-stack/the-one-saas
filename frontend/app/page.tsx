@@ -71,6 +71,29 @@ export default function Home() {
   const [busy, setBusy] = useState(false);
   const [demoMode, setDemoMode] = useState(false);
 
+  const SESSION_KEY = "the-one-saas.session";
+
+  function readSession() {
+    try {
+      return JSON.parse(localStorage.getItem(SESSION_KEY) || "{}");
+    } catch {
+      return {};
+    }
+  }
+
+  function writeSession(patch: Record<string, unknown>) {
+    const next = { ...readSession(), ...patch };
+    localStorage.setItem(SESSION_KEY, JSON.stringify(next));
+    return next;
+  }
+
+  function applyInstalled(list: ModuleItem[]) {
+    const saved = readSession().installed as string[] | undefined;
+    if (!saved?.length) return list;
+    const set = new Set(saved);
+    return list.map((m) => ({ ...m, installed: set.has(m.name) }));
+  }
+
   const loadProduct = useCallback(async () => {
     try {
       const [w, o, m, f, a] = await Promise.all([
@@ -82,7 +105,7 @@ export default function Home() {
       ]);
       if (w?.brand_alias) setBrand(w.brand_alias);
       setOffers(o?.tiers || []);
-      setModules(m?.modules || []);
+      setModules(applyInstalled(m?.modules || []));
       setFlow(f);
       setAnalytics(a);
     } catch (e: any) {
@@ -91,6 +114,11 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    const s = readSession();
+    if (s.token) setToken(String(s.token));
+    if (s.email) setEmail(String(s.email));
+    if (s.password) setPassword(String(s.password));
+    if (s.demoMode) setDemoMode(true);
     loadProduct();
   }, [loadProduct]);
 
@@ -208,7 +236,8 @@ export default function Home() {
                   setPassword(res.password);
                   setToken(res.token);
                   setDemoMode(true);
-                  setStatus(JSON.stringify(res.execute, null, 2));
+                  writeSession({ email: res.email, password: res.password, token: res.token, demoMode: true });
+                  setStatus("Demo ready. Modules install on this phone. Run AI from Command.");
                   setTab("command");
                 })
               }
@@ -273,7 +302,7 @@ export default function Home() {
 
       {tab === "modules" && (
         <section style={{ marginTop: 16, display: "grid", gap: 10 }}>
-          <p style={{ opacity: 0.7, margin: 0 }}>White-label verticals from THE ONE Layer 3 — install toggles persist in-session.</p>
+          <p style={{ opacity: 0.7, margin: 0 }}>Tap Install. It stays on this phone until you remove it.</p>
           {modules.map((m) => (
             <div
               key={m.name}
@@ -304,8 +333,12 @@ export default function Home() {
                       method: "POST",
                       body: JSON.stringify({ name: m.name, token: token || undefined }),
                     });
-                    setModules(res.modules || []);
-                    setStatus(`${res.module?.name} → ${res.module?.installed ? "Installed" : "Uninstalled"}`);
+                    const next = applyInstalled(res.modules || []).map((item) =>
+                      item.name === res.module?.name ? { ...item, installed: Boolean(res.module?.installed) } : item
+                    );
+                    setModules(next);
+                    writeSession({ installed: next.filter((x) => x.installed).map((x) => x.name) });
+                    setStatus(`${res.module?.name} → ${res.module?.installed ? "Installed" : "Removed"}`);
                   })
                 }
                 style={{
@@ -340,7 +373,8 @@ export default function Home() {
                 setPassword(res.password);
                 setToken(res.token);
                 setDemoMode(true);
-                setStatus(JSON.stringify(res.execute, null, 2));
+                writeSession({ email: res.email, password: res.password, token: res.token, demoMode: true });
+                setStatus("Demo ready. Run AI or open Modules to install.");
               })
             }
             style={{
@@ -390,7 +424,8 @@ export default function Home() {
                 run("register", async () => {
                   await request("/auth/register", { method: "POST", body: JSON.stringify({ email, password }) });
                   setDemoMode(false);
-                  setStatus("Registered");
+                  writeSession({ email, password, demoMode: false });
+                  setStatus("Registered. Tap Login.");
                 })
               }
               style={{ padding: "10px 14px", borderRadius: 8, border: 0, background: "#fff", color: "#000", fontWeight: 700, cursor: "pointer" }}
@@ -402,8 +437,10 @@ export default function Home() {
               onClick={() =>
                 run("login", async () => {
                   const res = await request("/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
+                  const demo = email.trim().toLowerCase() === DEMO_EMAIL;
                   setToken(res.token);
-                  setDemoMode(email.trim().toLowerCase() === DEMO_EMAIL);
+                  setDemoMode(demo);
+                  writeSession({ email, password, token: res.token, demoMode: demo });
                   setStatus("Logged in");
                 })
               }
@@ -416,7 +453,7 @@ export default function Home() {
               onClick={() =>
                 run("execute", async () => {
                   const res = await request("/execute?token=" + encodeURIComponent(token), { method: "POST" });
-                  setStatus(JSON.stringify(res, null, 2));
+                  setStatus(res.message || res.result || "AI executed");
                 })
               }
               style={{
@@ -482,7 +519,7 @@ export default function Home() {
               {sample.weekly_value_created != null ? money(sample.weekly_value_created) : "—"}
             </div>
             <div style={{ fontSize: 12, opacity: 0.55, marginTop: 4 }}>
-              {sample.week_label || "Sample weekly demo values"} · cadence {analytics?.update_cadence || "weekly"}
+              Demo sample · {sample.week_label || "sample week"} · cadence {analytics?.update_cadence || "weekly"}
             </div>
           </div>
           <div style={{ display: "grid", gap: 10, gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))" }}>
@@ -505,21 +542,23 @@ export default function Home() {
         </section>
       )}
 
-      {status && (
-        <pre
+      {status && tab === "command" && (
+        <div
           style={{
             marginTop: 20,
             padding: 12,
             background: "#111",
             borderRadius: 8,
             border: "1px solid #333",
-            whiteSpace: "pre-wrap",
-            fontSize: 12,
-            overflowX: "auto",
+            fontSize: 13,
+            lineHeight: 1.45,
           }}
         >
           {status}
-        </pre>
+        </div>
+      )}
+      {status && tab === "modules" && (
+        <p style={{ marginTop: 14, fontSize: 13, opacity: 0.75 }}>{status}</p>
       )}
     </main>
   );
