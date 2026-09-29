@@ -5,91 +5,91 @@
       "price": 49,
       "vertical": "core",
       "installed": false,
-      "blurb": "Core crew orchestration module for THE ONE command surface."
+      "blurb": "Crew roster for the people on site."
     },
     {
       "name": "THE ONE Companion",
       "price": 297,
       "vertical": "companion",
       "installed": false,
-      "blurb": "Co-evolving AI companion — core IP of THE ONE ecosystem."
+      "blurb": "Daily tasks and check-ins."
     },
     {
       "name": "Echo",
       "price": 497,
       "vertical": "avatar",
       "installed": false,
-      "blurb": "Holographic avatar layer with WebXR, haptics, and shaders."
+      "blurb": "Avatar / presence task pad."
     },
     {
       "name": "Raven",
       "price": 297,
       "vertical": "roofing",
       "installed": false,
-      "blurb": "Roofing AI ops — active and monetizing white-label vertical."
+      "blurb": "Roofing job pad. Address and notes. No price without squares."
     },
     {
       "name": "Construction Ops",
       "price": 497,
       "vertical": "construction",
       "installed": false,
-      "blurb": "General contractor platform for jobs, crews, and delivery."
+      "blurb": "Jobs, sites, and delivery notes for field work."
     },
     {
       "name": "LittlePro",
       "price": 297,
       "vertical": "drivers-ed",
       "installed": false,
-      "blurb": "Driver's ed school ops and outreach module."
+      "blurb": "School ops task pad."
     },
     {
       "name": "Snow Command Pro",
       "price": 397,
       "vertical": "snow-ice",
       "installed": false,
-      "blurb": "Snow and ice management command system."
+      "blurb": "Snow and ice route jobs."
     },
     {
       "name": "PoolConnect",
       "price": 297,
       "vertical": "pool-service",
       "installed": false,
-      "blurb": "Pool service ops — deployed white-label vertical."
+      "blurb": "Pool route jobs."
     },
     {
       "name": "Family Rights Voice",
       "price": 197,
       "vertical": "advocacy",
       "installed": false,
-      "blurb": "Advocacy platform for family rights workflows."
+      "blurb": "Case and follow-up tasks."
     },
     {
       "name": "PlayBetter",
       "price": 197,
       "vertical": "sports",
       "installed": false,
-      "blurb": "Sports performance tracking and coaching ops."
+      "blurb": "Practice and coaching tasks."
     },
     {
       "name": "Airbnb Arbitrage Agent",
       "price": 497,
       "vertical": "str",
       "installed": false,
-      "blurb": "Autonomous short-term rental arbitrage agent."
+      "blurb": "Property jobs and stay notes."
     },
     {
       "name": "Trucker Dispatch",
       "price": 397,
       "vertical": "logistics",
       "installed": false,
-      "blurb": "Logistics dispatch agent for trucking operations."
+      "blurb": "Load and dispatch jobs."
     },
     {
       "name": "FanzSpot HQ",
       "price": 0,
       "vertical": "developer",
       "installed": false,
-      "blurb": "Developer command center for the FanzSpot Labs portfolio."
+      "blurb": "Portfolio task pad."
     }
   ]
 }
