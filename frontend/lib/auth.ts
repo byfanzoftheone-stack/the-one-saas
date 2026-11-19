@@ -1,6 +1,12 @@
 import { SignJWT, jwtVerify } from "jose";
 
-const SECRET = new TextEncoder().encode(process.env.SECRET_KEY || "CHANGE_ME_SECRET");
+function getSecret() {
+  const s = process.env.SECRET_KEY;
+  if (!s && process.env.NODE_ENV === "production" && process.env.NEXT_PHASE !== "phase-production-build") {
+    throw new Error("SECRET_KEY must be set in production");
+  }
+  return new TextEncoder().encode(s || "dev-only-insecure-secret");
+}
 
 export const DEMO_EMAIL = "demo@the-one-saas.app";
 export const DEMO_PASSWORD = "demo1234";
@@ -26,10 +32,10 @@ export async function createToken(email: string) {
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("7d")
-    .sign(SECRET);
+    .sign(getSecret());
 }
 
 export async function verifyToken(token: string) {
-  const { payload } = await jwtVerify(token, SECRET);
+  const { payload } = await jwtVerify(token, getSecret());
   return String(payload.sub || "");
 }
