@@ -34,6 +34,8 @@ export async function POST(req: NextRequest) {
     mode: "subscription",
     "line_items[0][price]": price,
     "line_items[0][quantity]": "1",
+    // Server-side price id so the webhook can map price -> tier (never trust client-supplied tier).
+    "metadata[price_id]": price,
     success_url: `${base}/?checkout=success`,
     cancel_url: `${base}/?checkout=cancel`,
   });

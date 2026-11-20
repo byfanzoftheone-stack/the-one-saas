@@ -12,6 +12,7 @@
 | Approval gate | `/api/checkout` | Dry-run stub unless `STRIPE_SECRET_KEY`, `STRIPE_PRICE_<TIER>` AND `LIVE_ACTIONS_APPROVED=true` are set by the owner. |
 | Audit log | checkout, login | JSON line to stdout + in-memory ring (500). Stripe-style keys and bearer tokens are scrubbed. |
 | Audit view | `GET /api/audit` | Closed (403) unless `ADMIN_TOKEN` is set and sent as Bearer. |
+| Webhook | `/api/stripe/webhook` | Signature-verified, 120/min/IP, audited; queues keys only, never emails or calls Stripe. |
 | Rate limits | login 10/min/IP, checkout 5/min/IP | HTTP 429. |
 | Secret hygiene | `lib/auth.ts`, `.gitignore` | Production refuses to sign tokens without `SECRET_KEY`; `.env*` ignored except `.env.example`. |
 
@@ -22,6 +23,6 @@
 
 ## Known gaps (owner should close before scale)
 - Audit log, rate limits and users are in-memory and per-instance.
-- Backend (`backend/app/main.py`) still uses a default `SECRET_KEY`, `ALLOWED_ORIGINS=*`, plaintext fake users; the Next API routes are the active path. Harden or retire it.
-- No Stripe webhook handler yet (needed to provision paid access).
+- Old backend (`backend/app/main.py`): production now refuses the default `SECRET_KEY` and CORS uses an `ALLOWED_ORIGINS` allowlist (no `*`). Still plaintext in-memory fake users; the Next API routes are the active path. Retire it.
+- Stripe webhook exists (`/api/stripe/webhook`) but license storage is ephemeral until `LICENSE_DB` is persistent; key delivery is a manual owner step.
 - Demo credentials exist in `lib/auth.ts` (demo account).
