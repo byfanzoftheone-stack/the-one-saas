@@ -24,5 +24,5 @@
 ## Known gaps (owner should close before scale)
 - Audit log, rate limits and users are in-memory and per-instance.
 - Old backend (`backend/app/main.py`): production now refuses the default `SECRET_KEY` and CORS uses an `ALLOWED_ORIGINS` allowlist (no `*`). Still plaintext in-memory fake users; the Next API routes are the active path. Retire it.
-- Stripe webhook exists (`/api/stripe/webhook`) but license storage is ephemeral until `LICENSE_DB` is persistent; key delivery is a manual owner step.
+- Stripe webhook exists (`/api/stripe/webhook`); license storage is a transactional store (Postgres on Vercel via `LICENSE_DATABASE_URL`) and fails closed (503/deny) until configured; key delivery is a manual owner step.
 - Demo credentials exist in `lib/auth.ts` (demo account).

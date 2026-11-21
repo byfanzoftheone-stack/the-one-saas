@@ -1,6 +1,12 @@
-import type { LicenseWebhook, LicenseStore } from './vendor/license-webhook.mjs';
-export function priceTiersFromEnv(env?: Record<string, string | undefined>): Record<string, string>;
-export function licenseDbPath(env?: Record<string, string | undefined>): string;
-export function buildLicenseWebhook(opts?: { env?: Record<string, string | undefined>; audit?: (r: Record<string, unknown>) => void; store?: LicenseStore; now?: () => number }): LicenseWebhook;
-export function getLicenseWebhook(audit?: (r: Record<string, unknown>) => void): LicenseWebhook;
-export function validateLicense(key: unknown, audit?: (r: Record<string, unknown>) => void): { valid: boolean; tier?: string };
+import type { AsyncLicenseStore } from './vendor/license-webhook/stores.mjs';
+import type { AsyncLicenseWebhook } from './vendor/license-webhook/async.mjs';
+type Env = Record<string, string | undefined>;
+type Audit = (r: Record<string, unknown>) => void | Promise<void>;
+export function priceTiersFromEnv(env?: Env): Record<string, string>;
+export function licenseStoreFromEnv(env?: Env): Promise<AsyncLicenseStore>;
+export function describeStore(env?: Env): string;
+export function closeStore(store: AsyncLicenseStore): Promise<void>;
+export function buildLicenseWebhook(opts: { env?: Env; audit?: Audit; store: AsyncLicenseStore; now?: () => number }): AsyncLicenseWebhook;
+export function getStore(env?: Env): Promise<AsyncLicenseStore>;
+export function getLicenseWebhook(audit?: Audit): Promise<AsyncLicenseWebhook>;
+export function validateLicense(key: unknown, audit?: Audit): Promise<{ valid: boolean; tier?: string }>;

@@ -20,9 +20,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ detail: "Webhook not configured" }, { status: 503 });
   }
   const raw = Buffer.from(await req.arrayBuffer());
-  const lw = getLicenseWebhook((r: Record<string, unknown>) =>
-    audit("stripe-webhook", String(r.type), String(r.reason ?? "ok"), r)
-  );
-  const out = lw.handle(raw, req.headers.get("stripe-signature"));
-  return NextResponse.json(out.body, { status: out.status });
+  let lw;
+  try {
+    lw = await getLicenseWebhook((r: Record<string, unknown>) =>
+      audit("stripe-webhook", String(r.type), String(r.reason ?? "ok"), r)
+    );
+  } catch {
+    // Fail closed: no/unreachable license store. 503 makes Stripe retry later; nothing is issued or lost.
+    audit(key, "stripe_webhook", "store_not_configured");
+    return NextResponse.json({ detail: "License store not configured" }, { status: 503 });
+  }
+  try {
+    const out = await lw.handle(raw, req.headers.get("stripe-signature"));
+    return NextResponse.json(out.body, { status: out.status });
+  } catch {
+    // Transaction rolled back; Stripe will retry.
+    audit(key, "stripe_webhook", "store_error");
+    return NextResponse.json({ detail: "Temporary error" }, { status: 503 });
+  }
 }
