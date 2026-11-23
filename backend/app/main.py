@@ -6,10 +6,18 @@ import jwt
 
 app = FastAPI()
 
-SECRET_KEY = os.environ.get("SECRET_KEY", "CHANGE_ME_SECRET")
+_DEFAULT_SECRET = "CHANGE_ME_SECRET"
+SECRET_KEY = os.environ.get("SECRET_KEY", _DEFAULT_SECRET)
+# Production = a real deploy (Railway sets RAILWAY_ENVIRONMENT) or an explicit ENV/APP_ENV=production.
+IS_PRODUCTION = (
+    os.environ.get("ENV", os.environ.get("APP_ENV", "")).lower() == "production"
+    or bool(os.environ.get("RAILWAY_ENVIRONMENT"))
+)
+if IS_PRODUCTION and SECRET_KEY in ("", _DEFAULT_SECRET, "CHANGE_ME_LONG_RANDOM"):
+    raise RuntimeError("SECRET_KEY must be set to a real secret in production (default refused)")
 
-_raw_origins = os.environ.get("ALLOWED_ORIGINS", "*").strip()
-ALLOWED_ORIGINS = ["*"] if _raw_origins == "*" else [o.strip() for o in _raw_origins.split(",")]
+# Explicit allowlist only. Empty/unset => no cross-origin access; "*" is refused.
+ALLOWED_ORIGINS = [o.strip() for o in os.environ.get("ALLOWED_ORIGINS", "").split(",") if o.strip() and o.strip() != "*"]
 
 app.add_middleware(
     CORSMiddleware,

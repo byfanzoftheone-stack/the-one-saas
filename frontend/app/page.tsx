@@ -195,6 +195,7 @@ export default function Home() {
               <div style={{ fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", opacity: 0.55 }}>{tier.key}</div>
               <div style={{ fontSize: 26, fontWeight: 800 }}>{money(tier.monthly_fee)}<span style={{ fontSize: 13, fontWeight: 500, opacity: 0.6 }}>/mo</span></div>
               <div style={{ fontSize: 13, opacity: 0.65 }}>Setup {money(tier.setup_fee)}</div>
+              <button disabled={busy} onClick={() => run("checkout", async () => { const r = await request("/checkout", { method: "POST", body: JSON.stringify({ tier: tier.key }) }); if (r.mode === "live" && r.url) { window.location.href = r.url; } else { setStatus(r.message || "Checkout stub."); setTab("home"); } })} style={{ marginTop: 10, padding: "10px 14px", borderRadius: 8, border: "1px solid #fbbf24", background: "#f59e0b", color: "#111", fontWeight: 800 }}>Choose {titleCase(tier.key)}</button>
             </div>
           ))}
         </section>
